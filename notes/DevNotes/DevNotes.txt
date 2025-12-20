@@ -1,0 +1,42 @@
+----------------------------------------------vision------------------------------------------------------
+
+
+
+-----------------------------------------------bugs--------------------------------------------------
+
+when tabbing out and tabbing back in controls don't work'
+
+-------------------------------------------fixes to test--------------------------------------------------
+
+
+
+-----------------------------Can't do or don't know how to do myself---------------------------------
+
+
+
+-----------------------------------------------to do-----------------------------------------------
+
+-game release posts
+-variables and triggers for trophies
+-screenshots
+-texts
+-find communities in which to share about the game
+-video content
+
+--------------------------------------------follow ups---------------------------------------------
+
+
+
+------------------------------------------once published------------------------------------------
+
+-proposer à GOG
+-itch
+-newgrounds
+-GXG
+-reparler des sites HTML qui rapportent et intégration de leur SDK
+-faire corriger le dev sur sites style metacritic, gamefaq
+
+
+--------------------------------------features for next games----------------------------------------
+
+Additional heros to hire

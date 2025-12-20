@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"snd_musicUpgrades",
+  "audioGroupId":{
+    "name":"BGM",
+    "path":"audiogroups/BGM",
+  },
+  "bitDepth":1,
+  "bitRate":128,
+  "compression":1,
+  "conversionMode":0,
+  "duration":115.670204,
+  "name":"snd_musicUpgrades",
+  "parent":{
+    "name":"BGM",
+    "path":"folders/Sounds/BGM.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"snd_musicUpgrades.mp3",
+  "type":1,
+  "volume":1.0,
+}

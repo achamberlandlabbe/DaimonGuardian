@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"trophyGlobals",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"trophyGlobals",
+  "parent":{
+    "name":"GuardianDaimon",
+    "path":"GuardianDaimon.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

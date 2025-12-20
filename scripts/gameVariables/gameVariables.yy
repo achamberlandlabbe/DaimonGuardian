@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"gameVariables",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"gameVariables",
+  "parent":{
+    "name":"GuardianDaimon",
+    "path":"GuardianDaimon.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

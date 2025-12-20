@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"snd_musicLevels",
+  "audioGroupId":{
+    "name":"BGM",
+    "path":"audiogroups/BGM",
+  },
+  "bitDepth":1,
+  "bitRate":128,
+  "compression":1,
+  "conversionMode":0,
+  "duration":48.039185,
+  "name":"snd_musicLevels",
+  "parent":{
+    "name":"BGM",
+    "path":"folders/Sounds/BGM.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"snd_musicLevels.mp3",
+  "type":1,
+  "volume":1.0,
+}

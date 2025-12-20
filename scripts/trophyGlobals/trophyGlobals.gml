@@ -1,0 +1,1 @@
+//crées ici les globals qui serviront de checks pour les trophées

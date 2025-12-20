@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"saveFunctions",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"saveFunctions",
+  "parent":{
+    "name":"GuardianDaimon",
+    "path":"GuardianDaimon.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
