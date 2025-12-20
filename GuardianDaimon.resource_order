@@ -64,6 +64,7 @@
     {"name":"spr_rock4","order":25,"path":"sprites/spr_rock4/spr_rock4.yy",},
     {"name":"spr_rock5","order":26,"path":"sprites/spr_rock5/spr_rock5.yy",},
     {"name":"spr_spellbar","order":2,"path":"sprites/spr_spellbar/spr_spellbar.yy",},
+    {"name":"spr_spiritLance","order":1,"path":"sprites/spr_spiritLance/spr_spiritLance.yy",},
     {"name":"spr_thrownSpear","order":3,"path":"sprites/spr_thrownSpear/spr_thrownSpear.yy",},
     {"name":"spr_tree1","order":20,"path":"sprites/spr_tree1/spr_tree1.yy",},
     {"name":"spr_tree2","order":21,"path":"sprites/spr_tree2/spr_tree2.yy",},

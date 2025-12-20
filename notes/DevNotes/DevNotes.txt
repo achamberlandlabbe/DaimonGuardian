@@ -4,7 +4,7 @@
 
 -----------------------------------------------bugs--------------------------------------------------
 
-when tabbing out and tabbing back in controls don't work'
+
 
 -------------------------------------------fixes to test--------------------------------------------------
 
@@ -15,6 +15,10 @@ when tabbing out and tabbing back in controls don't work'
 
 
 -----------------------------------------------to do-----------------------------------------------
+
+-level up mechanics
+-obj_protect visuals
+
 
 -game release posts
 -variables and triggers for trophies

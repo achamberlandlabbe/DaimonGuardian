@@ -36,8 +36,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_holyBolt",
-    "path":"sprites/spr_holyBolt/spr_holyBolt.yy",
+    "name":"spr_spiritBolt",
+    "path":"sprites/spr_spiritBolt/spr_spiritBolt.yy",
   },
   "spriteMaskId":null,
   "visible":true,
