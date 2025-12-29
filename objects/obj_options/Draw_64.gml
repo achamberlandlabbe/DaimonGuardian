@@ -121,12 +121,10 @@ if (show_main_menu_confirmation) {
     draw_text(conf_x + conf_width/2, conf_y + 15, "WARNING");
 
     draw_set_color(c_white);
-    draw_text(conf_x + conf_width/2, conf_y + 45, "Exiting the game this way will cause you to lose");
-    draw_text(conf_x + conf_width/2, conf_y + 75, "all unsaved progress. If you wish to keep the gold");
-    draw_text(conf_x + conf_width/2, conf_y + 105, "and XP earned this run, use the " + get_button_name("runAway") + " button");
-    draw_text(conf_x + conf_width/2, conf_y + 135, "while in-game to retreat first.");
+    draw_text(conf_x + conf_width/2, conf_y + 75, "Exiting the game will cause you to lose");
+    draw_text(conf_x + conf_width/2, conf_y + 105, "all unsaved progress.");
 
-    draw_text(conf_x + conf_width/2, conf_y + 180, "Are you sure you want to exit?");
+    draw_text(conf_x + conf_width/2, conf_y + 165, "Are you sure you want to exit?");
 
     // Yes/No buttons
     var button_width = 100;

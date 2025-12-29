@@ -1,30 +1,49 @@
 /// obj_options Step Event
 
+#region Escape Key Handler
 // Always allow closing the menu with Escape, even during confirmation
 if (keyboard_check_pressed(vk_escape)) {
     instance_destroy();
     exit;
 }
+#endregion
 
-// Main Menu confirmation handling
+#region Main Menu Confirmation Dialog
 if (show_main_menu_confirmation) {
-    // Cursor hover on Yes/No buttons
+    // Get cursor position in GUI space
     var cursor = instance_find(obj_cursor, 0);
+    var cursor_gui_x = 0;
+    var cursor_gui_y = 0;
+    
     if (cursor != noone) {
+        // Convert cursor room position to GUI position
+        var cam = view_camera[0];
+        var cam_x = camera_get_view_x(cam);
+        var cam_y = camera_get_view_y(cam);
+        var cam_w = camera_get_view_width(cam);
+        var cam_h = camera_get_view_height(cam);
+        
+        var gui_w = display_get_gui_width();
+        var gui_h = display_get_gui_height();
+        
+        // Convert cursor position from room to GUI coordinates
+        cursor_gui_x = ((cursor.x - cam_x) / cam_w) * gui_w;
+        cursor_gui_y = ((cursor.y - cam_y) / cam_h) * gui_h;
+        
         var conf_width = 630;
         var conf_height = 300;
-        var conf_x = (room_width / 2) - (conf_width / 2);
-        var conf_y = (room_height / 2) - (conf_height / 2);
+        var conf_x = (gui_w / 2) - (conf_width / 2);
+        var conf_y = (gui_h / 2) - (conf_height / 2);
         var button_width = 100;
         var button_height = 40;
         var button_y = conf_y + conf_height - button_height - 20;
         var no_x = conf_x + conf_width / 2 - button_width - 10;
         var yes_x = conf_x + conf_width / 2 + 10;
 
-        if (point_in_rectangle(cursor.x, cursor.y, no_x, button_y, no_x + button_width, button_y + button_height)) {
+        if (point_in_rectangle(cursor_gui_x, cursor_gui_y, no_x, button_y, no_x + button_width, button_y + button_height)) {
             main_menu_selection = "no";
         }
-        if (point_in_rectangle(cursor.x, cursor.y, yes_x, button_y, yes_x + button_width, button_y + button_height)) {
+        if (point_in_rectangle(cursor_gui_x, cursor_gui_y, yes_x, button_y, yes_x + button_width, button_y + button_height)) {
             main_menu_selection = "yes";
         }
     }
@@ -35,10 +54,41 @@ if (show_main_menu_confirmation) {
 
     // Confirm
     if (input_check_pressed("accept", 0)) {
-        if (main_menu_selection == "yes") {
-            room_goto(roomTitleScreen);
-        } else {
-            show_main_menu_confirmation = false;
+        show_debug_message("Accept pressed! Selection: " + main_menu_selection);
+        
+        var clicked_on_button = true; // Default to true for keyboard
+        
+        // Only check cursor position if cursor exists AND we're using mouse input
+        if (cursor != noone && mouse_check_button_pressed(mb_left)) {
+            var gui_w = display_get_gui_width();
+            var gui_h = display_get_gui_height();
+            var conf_width = 630;
+            var conf_height = 300;
+            var conf_x = (gui_w / 2) - (conf_width / 2);
+            var conf_y = (gui_h / 2) - (conf_height / 2);
+            var button_width = 100;
+            var button_height = 40;
+            var button_y = conf_y + conf_height - button_height - 20;
+            var no_x = conf_x + conf_width / 2 - button_width - 10;
+            var yes_x = conf_x + conf_width / 2 + 10;
+
+            // For mouse click, require clicking on a button
+            clicked_on_button = false;
+            if (point_in_rectangle(cursor_gui_x, cursor_gui_y, no_x, button_y, no_x + button_width, button_y + button_height) ||
+                point_in_rectangle(cursor_gui_x, cursor_gui_y, yes_x, button_y, yes_x + button_width, button_y + button_height)) {
+                clicked_on_button = true;
+            }
+        }
+        
+        if (clicked_on_button) {
+            show_debug_message("Button was clicked! Executing selection: " + main_menu_selection);
+            if (main_menu_selection == "yes") {
+                show_debug_message("Going to title screen...");
+                room_goto(roomTitleScreen);
+            } else {
+                show_debug_message("Closing confirmation dialog...");
+                show_main_menu_confirmation = false;
+            }
         }
     }
 
@@ -49,8 +99,9 @@ if (show_main_menu_confirmation) {
 
     exit; // Don't process other inputs during confirmation
 }
+#endregion
 
-// Cursor-based selection for menu options
+#region Cursor-Based Menu Selection
 var cursor = instance_find(obj_cursor, 0);
 if (cursor != noone) {
     // Menu positioning (matching Draw GUI Event calculations)
@@ -137,7 +188,9 @@ if (cursor != noone) {
         }
     }
 }
+#endregion
 
+#region Keyboard Navigation
 // Movement between buttons
 if (input_check_pressed("up", 0) && optionsMenuSelection > 0) {
     optionsMenuSelection--;
@@ -155,7 +208,9 @@ else if (input_check_pressed("down", 0)) {
     optionsMenuSelection = 0;
     playSFX(snd_switch, 1, 1, 1);
 }
+#endregion
 
+#region Option Actions
 switch(optionsMenuSelection) {
     case 0: // Master volume
         if (input_check_released("left", 0) && global.saveData.masterVolume >= VOLUME_STEP) {
@@ -212,3 +267,4 @@ switch(optionsMenuSelection) {
         }
         break;
 }
+#endregion

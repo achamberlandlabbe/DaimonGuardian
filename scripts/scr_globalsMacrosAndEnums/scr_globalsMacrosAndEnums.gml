@@ -12,7 +12,7 @@ global.levelComplete = false;
 global.gameOver = false;
 global.currentLevel = 1;
 global.currentWave = 1;
-
+global.showTutorial = false;
 
 
 // Save data structure

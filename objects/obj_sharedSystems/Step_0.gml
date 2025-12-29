@@ -24,7 +24,7 @@ if (global.canPause) {
         global.pause_was_released = true;
     }
 
-    if (_doPause && !instance_exists(obj_options) && !instance_exists(obj_rigBuild)) {
+    if (_doPause && !instance_exists(obj_options)) {
         global.isPaused = true;
         instance_create_depth(0, 0, -10001, obj_options);
     }
