@@ -1,5 +1,11 @@
 /// obj_gameManager Step Event
 
+// Check if tutorial should be shown
+if (room == roomLevel1 && global.showTutorial) {
+    global.showTutorial = false;  // Reset flag
+    instance_create_depth(0, 0, -9999, obj_story);
+}
+
 #region Rig Build Menu
 // Rig Build menu toggle - available in any gameplay room
 if ((room != roomTitleScreen && room != roomCredits && room != RoomStart) && input_check_pressed("rigBuild") && !instance_exists(obj_options)) {

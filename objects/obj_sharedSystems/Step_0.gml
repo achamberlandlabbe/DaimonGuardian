@@ -78,38 +78,67 @@ if (room == roomTitleScreen) {
         if (input_check_pressed("left", 0)) newGameSelection = "no";
         if (input_check_pressed("right", 0)) newGameSelection = "yes";
 
-        // Confirm
+        // Confirm - only accept clicks if cursor is over a button
         if (input_check_pressed("accept", 0)) {
-            if (newGameSelection == "yes") {
-                // FULL RESET - same as death
+            var cursor = instance_find(obj_cursor, 0);
+            var clicked_on_button = false;
+            
+            if (cursor != noone) {
+                var conf_width = 630;
+                var conf_height = 300;
+                var conf_x = (room_width / 2) - (conf_width / 2);
+                var conf_y = (room_height / 2) - (conf_height / 2);
+                var button_width = 100;
+                var button_height = 40;
+                var button_y = conf_y + conf_height - button_height - 20;
+                var no_x = conf_x + conf_width / 2 - button_width - 10;
+                var yes_x = conf_x + conf_width / 2 + 10;
 
-                // Update best score if current score is higher
-                if (global.player1score > global.saveData.bestScore) {
-                    global.saveData.bestScore = global.player1score;
+                // Check if cursor is over either button
+                if (point_in_rectangle(cursor.x, cursor.y, no_x, button_y, no_x + button_width, button_y + button_height) ||
+                    point_in_rectangle(cursor.x, cursor.y, yes_x, button_y, yes_x + button_width, button_y + button_height)) {
+                    clicked_on_button = true;
                 }
-
-                // Reset meta-progression
-                global.player1score = 0;
-
-                // Reset wave/level
-                global.currentWave = 1;
-                global.currentLevel = 1;
-
-                // Mark no active run
-                global.saveData.hasActiveRun = false;
-
-                // Reset tutorial flag and show tutorial
-                global.saveData.hasSeenTutorial = false;
-                global.showTutorial = true;
-
-                // Trigger save
-                global.doSave = true;
-
-                // Start new game
-                room_goto(global.startingRoom);
             } else {
-                // Selected No - close dialog
-                showNewGameConfirmation = false;
+                // No cursor (keyboard input) - always accept
+                clicked_on_button = true;
+            }
+            
+            if (clicked_on_button) {
+                if (newGameSelection == "yes") {
+                    // FULL RESET - same as death
+
+                    // Update best score if current score is higher
+                    if (global.player1score > global.saveData.bestScore) {
+                        global.saveData.bestScore = global.player1score;
+                    }
+
+                    // Reset meta-progression
+                    global.player1score = 0;
+
+                    // Reset wave/level
+                    global.currentWave = 1;
+                    global.currentLevel = 1;
+
+                    // Mark no active run
+                    global.saveData.hasActiveRun = false;
+
+                    // Reset tutorial flag and show tutorial
+                    global.saveData.hasSeenTutorial = false;
+                    global.showTutorial = true;
+
+                    // Trigger save
+                    global.doSave = true;
+
+                    // Close confirmation dialog
+                    showNewGameConfirmation = false;
+
+                    // Start new game
+                    room_goto(global.startingRoom);
+                } else {
+                    // Selected No - close dialog
+                    showNewGameConfirmation = false;
+                }
             }
         }
 

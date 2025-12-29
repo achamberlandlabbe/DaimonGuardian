@@ -1,6 +1,5 @@
 {
   "FolderOrderSettings":[
-    {"name":"enchantments","order":3,"path":"folders/Objects/enchantments.yy",},
     {"name":"enemy attacks","order":4,"path":"folders/Objects/enemy attacks.yy",},
     {"name":"hero base attacks","order":1,"path":"folders/Objects/hero base attacks.yy",},
     {"name":"backgrounds","order":12,"path":"folders/Sprites/backgrounds.yy",},
@@ -20,9 +19,9 @@
     {"name":"obj_parentEnemies","order":1,"path":"objects/obj_parentEnemies/obj_parentEnemies.yy",},
     {"name":"obj_parentProjectile","order":1,"path":"objects/obj_parentProjectile/obj_parentProjectile.yy",},
     {"name":"obj_protect","order":6,"path":"objects/obj_protect/obj_protect.yy",},
-    {"name":"obj_rigBuild","order":1,"path":"objects/obj_rigBuild/obj_rigBuild.yy",},
     {"name":"obj_rock","order":1,"path":"objects/obj_rock/obj_rock.yy",},
-    {"name":"obj_staffExplosion","order":2,"path":"objects/obj_staffExplosion/obj_staffExplosion.yy",},
+    {"name":"obj_story","order":9,"path":"objects/obj_story/obj_story.yy",},
+    {"name":"obj_tutorial","order":4,"path":"objects/obj_tutorial/obj_tutorial.yy",},
     {"name":"obj_upgradeMenu","order":3,"path":"objects/obj_upgradeMenu/obj_upgradeMenu.yy",},
     {"name":"scr_calculateCurrentGear","order":2,"path":"scripts/scr_calculateCurrentGear/scr_calculateCurrentGear.yy",},
     {"name":"scr_calculateVehicleStats","order":1,"path":"scripts/scr_calculateVehicleStats/scr_calculateVehicleStats.yy",},

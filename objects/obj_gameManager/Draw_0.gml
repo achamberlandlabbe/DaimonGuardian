@@ -1,5 +1,22 @@
-// Only draw lighting in gameplay room
-if (room != roomLevel1) exit;
+/// obj_gameManager Draw Event
+
+// Exit if not in gameplay room
+if (room != roomLevel1) {
+    show_debug_message("Lighting: Not in roomLevel1, exiting");
+    exit;
+}
+
+// Exit if tutorial or story is active
+if (instance_exists(obj_tutorial)) {
+    show_debug_message("Lighting: Tutorial exists, exiting");
+    exit;
+}
+if (instance_exists(obj_story)) {
+    show_debug_message("Lighting: Story exists, exiting");
+    exit;
+}
+
+show_debug_message("Lighting: Drawing darkness overlay");
 
 // Draw darkness overlay with lights
 var cam = view_camera[0];
@@ -20,7 +37,6 @@ surface_set_target(darkness_surface);
     if (player != noone) {
         var px = player.x - cam_x;
         var py = player.y - cam_y;
-        // Draw gradient manually with circles
         var max_radius = light_radius + light_falloff;
         var steps = 50;
         for (var i = 0; i < steps; i++) {

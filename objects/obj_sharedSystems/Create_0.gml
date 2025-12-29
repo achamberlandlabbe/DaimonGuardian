@@ -1,4 +1,4 @@
-/// obj_sharedSystems Create Event – Nyaa Smack
+/// obj_sharedSystems Create Event
 randomize();
 config();
 global.buffer = room_height * 0.05;

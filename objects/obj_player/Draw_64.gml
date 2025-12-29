@@ -1,5 +1,8 @@
 /// obj_player Draw GUI Event - Guardian Daimon HUD
 
+// Don't draw HUD during tutorial/story
+if (instance_exists(obj_tutorial) || instance_exists(obj_story)) exit;
+
 // Get GUI dimensions
 var gui_w = display_get_gui_width();
 var gui_h = display_get_gui_height();
