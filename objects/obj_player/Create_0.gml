@@ -13,10 +13,15 @@ move_friction = 0.85;
 // Aim direction (for mouse/right stick aiming)
 aim_direction = 0;
 
+// Initialize skill system (run once)
+if (!variable_global_exists("playerBuild")) {
+    init_skill_system();
+}
+
 // Level anima system
 player_level = 1;
 player_anima = 0;  // Anima collected from kills (physical pickups)
-anima_to_next_level = 25;  // Will scale with each level
+anima_to_next_level = 1;  // default 25, Will scale with each level
 
 // Abilities array - player starts with one basic attack
 abilities = [];

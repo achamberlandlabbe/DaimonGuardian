@@ -3,17 +3,14 @@
 if (global.isPaused) {
     exit;
 }
-
 // === MOVEMENT INPUT (WASD or Left Stick) ===
 var move_x = input_check("right") - input_check("left");
 var move_y = input_check("down") - input_check("up");
-
 // Normalize diagonal movement
 if (move_x != 0 && move_y != 0) {
     move_x *= 0.707;  // 1/sqrt(2)
     move_y *= 0.707;
 }
-
 // Apply acceleration or friction
 if (move_x != 0 || move_y != 0) {
     // Accelerate toward target velocity
@@ -31,21 +28,17 @@ if (move_x != 0 || move_y != 0) {
     if (abs(hspeed_current) < 0.1) hspeed_current = 0;
     if (abs(vspeed_current) < 0.1) vspeed_current = 0;
 }
-
 // Move player
 x += hspeed_current;
 y += vspeed_current;
-
 // Keep player in room bounds (with margin)
 var margin = 32;
 x = clamp(x, margin, room_width - margin);
 y = clamp(y, margin, room_height - margin);
-
 // === AIM DIRECTION (Mouse or Right Stick) ===
 // Try gamepad right stick first
 var aim_x = input_value("aim_right") - input_value("aim_left");
 var aim_y = input_value("aim_down") - input_value("aim_up");
-
 if (aim_x != 0 || aim_y != 0) {
     // Gamepad right stick is being used
     aim_direction = point_direction(0, 0, aim_x, aim_y);
@@ -53,10 +46,8 @@ if (aim_x != 0 || aim_y != 0) {
     // No gamepad input - use mouse position
     aim_direction = point_direction(x, y, mouse_x, mouse_y);
 }
-
 // Update sprite direction based on aim
 image_angle = aim_direction - 90;
-
 // === ABILITY USAGE ===
 // Update cooldowns
 for (var i = 0; i < array_length(abilities); i++) {
@@ -64,7 +55,6 @@ for (var i = 0; i < array_length(abilities); i++) {
         ability_cooldowns[i]--;
     }
 }
-
 // Use basic attack (ability 0) with mouse button held or attack button held
 if (array_length(abilities) > 0) {
     if ((mouse_check_button(mb_left) || input_check("attack")) 
@@ -81,7 +71,6 @@ if (array_length(abilities) > 0) {
         projectile.image_angle = projectile.direction;
     }
 }
-
 // === COMBO SYSTEM ===
 if (combo_count > 0) {
     combo_timer--;
@@ -90,7 +79,6 @@ if (combo_count > 0) {
         combo_count = 0;
     }
 }
-
 // === XP AND LEVELING ===
 // Check if we've earned enough anima to level up
 if (player_anima >= anima_to_next_level) {
@@ -103,13 +91,12 @@ if (player_anima >= anima_to_next_level) {
     // Heal to full on level up
     playerHP = playerMaxHP;
     
-    // TODO: Show ability selection screen
+    // Show level up menu
+    instance_create_depth(x, y, -9999, obj_levelUpMenu);
     show_debug_message("LEVEL UP! Now level " + string(player_level));
 }
-
 // Update depth for proper layering
 depth = -y;
-
 // Check for death
 if (playerHP <= 0) {
     if (continues > 0) {
