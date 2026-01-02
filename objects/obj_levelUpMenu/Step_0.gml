@@ -115,30 +115,45 @@ if (input_mode == "mouse" && cursor != noone) {
     var button2_x = menu_x + spacing + upgrade_button_width + spacing;
     var button3_x = menu_x + spacing + (upgrade_button_width + spacing) * 2;
     
+    show_debug_message("=== HOVER CHECK: cursor at " + string(cursor_gui_x) + ", " + string(cursor_gui_y));
+    
     // Check all visible upgrade buttons for hover
     for (var row = 0; row < total_rows; row++) {
         var current_row_y = upgrade_button_y + (row * (upgrade_button_height + row_spacing)) - scroll_offset;
         
-        // Skip if row is not visible
-        if (current_row_y + upgrade_button_height < menu_y + 100 || current_row_y > menu_y + menu_height - 100) {
+        show_debug_message("Hover Row " + string(row) + ": y=" + string(current_row_y) + " to " + string(current_row_y + upgrade_button_height) + " | content_y: " + string(content_y_start) + " to " + string(content_y_end));
+        
+        // Skip if row is NOT AT ALL visible within content area
+        // A row is hoverable if ANY part of it overlaps with the content area
+        // Row overlaps if: row_bottom > content_start AND row_top < content_end
+        var row_bottom = current_row_y + upgrade_button_height;
+        if (row_bottom <= content_y_start || current_row_y >= content_y_end) {
+            show_debug_message("  SKIPPED (not visible)");
             continue;
         }
         
+        show_debug_message("  CHECKING hover for row " + string(row));
+        
         // Check which button is hovered
         if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button1_x, current_row_y, button1_x + upgrade_button_width, current_row_y + upgrade_button_height)) {
+            show_debug_message("  HOVER MATCH button 1!");
             hovered_row = row;
             hovered_col = 0;
             break;
         } else if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button2_x, current_row_y, button2_x + upgrade_button_width, current_row_y + upgrade_button_height)) {
+            show_debug_message("  HOVER MATCH button 2!");
             hovered_row = row;
             hovered_col = 1;
             break;
         } else if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button3_x, current_row_y, button3_x + upgrade_button_width, current_row_y + upgrade_button_height)) {
+            show_debug_message("  HOVER MATCH button 3!");
             hovered_row = row;
             hovered_col = 2;
             break;
         }
     }
+    
+    show_debug_message("Final hover state: row=" + string(hovered_row) + ", col=" + string(hovered_col));
     
     // Check if hovering confirm button
     if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button_x, button_y, button_x + button_width, button_y + button_height)) {
@@ -148,8 +163,8 @@ if (input_mode == "mouse" && cursor != noone) {
 
 // Handle mouse clicks
 if (clicked) {
-    show_debug_message("Mouse clicked at GUI position: " + string(cursor_gui_x) + ", " + string(cursor_gui_y));
-    show_debug_message("Current selected_upgrade: " + string(selected_upgrade));
+    show_debug_message("=== CLICK at GUI position: " + string(cursor_gui_x) + ", " + string(cursor_gui_y) + " ===");
+    show_debug_message("Current selected_upgrade BEFORE: " + string(selected_upgrade));
     
     // Calculate upgrade button positions
     var total_button_width = upgrade_button_width * 3;
@@ -163,13 +178,25 @@ if (clicked) {
     for (var row = 0; row < total_rows; row++) {
         var current_row_y = upgrade_button_y + (row * (upgrade_button_height + row_spacing)) - scroll_offset;
         
-        // Skip if row is not visible
-        if (current_row_y + upgrade_button_height < menu_y + 100 || current_row_y > menu_y + menu_height - 100) {
+        show_debug_message("Click Row " + string(row) + ": y=" + string(current_row_y) + " to " + string(current_row_y + upgrade_button_height) + " | content_y: " + string(content_y_start) + " to " + string(content_y_end));
+        
+        // Skip if row is NOT AT ALL visible within content area
+        // A row is clickable if ANY part of it overlaps with the content area
+        // Row overlaps if: row_bottom > content_start AND row_top < content_end
+        var row_bottom = current_row_y + upgrade_button_height;
+        if (row_bottom <= content_y_start || current_row_y >= content_y_end) {
+            show_debug_message("  SKIPPED (not visible)");
             continue;
         }
         
+        show_debug_message("  CHECKING buttons for row " + string(row));
+        show_debug_message("  Button 1: x=" + string(button1_x) + "-" + string(button1_x + upgrade_button_width) + " y=" + string(current_row_y) + "-" + string(current_row_y + upgrade_button_height));
+        show_debug_message("  Button 2: x=" + string(button2_x) + "-" + string(button2_x + upgrade_button_width) + " y=" + string(current_row_y) + "-" + string(current_row_y + upgrade_button_height));
+        show_debug_message("  Button 3: x=" + string(button3_x) + "-" + string(button3_x + upgrade_button_width) + " y=" + string(current_row_y) + "-" + string(current_row_y + upgrade_button_height));
+        
         // Check button 1
         if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button1_x, current_row_y, button1_x + upgrade_button_width, current_row_y + upgrade_button_height)) {
+            show_debug_message("  CLICK MATCH button 1!");
             if (row == 0) {
                 show_debug_message("Clicked upgrade button 1");
                 selected_upgrade = 1;
@@ -214,6 +241,8 @@ if (clicked) {
             exit;
         }
     }
+    
+    show_debug_message("=== Click loop finished. selected_upgrade = " + string(selected_upgrade));
     
     // Check confirm button - must be hovering to click
     if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button_x, button_y, button_x + button_width, button_y + button_height)) {
@@ -356,30 +385,38 @@ if (input_check_pressed("up")) {
 
 // Accept button (keyboard/gamepad) - select highlighted button
 if (input_check_pressed("accept")) {
+    var should_process_accept = true;
+    
     // Switch to keyboard mode
     if (input_mode == "mouse") {
-        input_mode = "keyboard";
-        // Start from where mouse was hovering
+        // Check if mouse is actually hovering over something
         if (hovered_confirm) {
+            input_mode = "keyboard";
             current_location = "confirm";
-        } else if (hovered_row >= 0) {
+        } else if (hovered_row >= 0 && hovered_col >= 0) {
+            input_mode = "keyboard";
             current_row = hovered_row;
             current_col = hovered_col;
             current_location = "grid";
+        } else {
+            // Mouse clicked but not hovering over anything - ignore the accept
+            // This prevents clicking below visible area from selecting the default highlighted button
+            should_process_accept = false;
         }
     }
     
-    if (current_location == "grid") {
-        // Check if this is row 0 (unlocked) or other rows (locked)
-        if (current_row == 0) {
-            // Only row 0 has actual upgrades
-            selected_upgrade = (current_row * 3) + current_col + 1; // 1, 2, or 3
-        } else {
-            // Locked upgrade
-            show_error_popup = true;
-            error_message = "That upgrade has yet to be unlocked.";
-        }
-    } else if (current_location == "confirm") {
+    if (should_process_accept) {
+        if (current_location == "grid") {
+            // Check if this is row 0 (unlocked) or other rows (locked)
+            if (current_row == 0) {
+                // Only row 0 has actual upgrades
+                selected_upgrade = (current_row * 3) + current_col + 1; // 1, 2, or 3
+            } else {
+                // Locked upgrade
+                show_error_popup = true;
+                error_message = "That upgrade has yet to be unlocked.";
+            }
+        } else if (current_location == "confirm") {
         // Confirm button
         if (selected_upgrade > 0) {
             // Apply the selected upgrade
@@ -392,6 +429,7 @@ if (input_check_pressed("accept")) {
             // Show error popup
             show_error_popup = true;
             error_message = "Please select an upgrade to continue";
+        }
         }
     }
 }
