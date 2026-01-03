@@ -58,9 +58,10 @@ if (!gamepad_input) {
     }
 }
 
-// Clamp cursor to stay within the visible camera view
-x = clamp(x, cam_x, cam_x + cam_w);
-y = clamp(y, cam_y, cam_y + cam_h);
+// Clamp cursor to stay within bounds
+// Use room bounds instead of camera view to allow full screen cursor movement
+x = clamp(x, 0, room_width - 1);
+y = clamp(y, 0, room_height - 1);
 
 // Update previous mouse position for next frame
 prev_mouse_x = mouse_x;
