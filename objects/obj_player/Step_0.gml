@@ -77,6 +77,23 @@ if (array_length(abilities) > 0) {
         // Spawn projectile at player position
         var projectile = instance_create_depth(x, y, depth - 1, obj_PCautoAttack);
         
+        // Apply upgrade bonuses from skill_upgrades
+        // Row 0 = Base Attack: [0]=Range, [1]=Damage, [2]=Speed
+        if (variable_instance_exists(id, "skill_upgrades")) {
+            var range_rank = skill_upgrades[0][0];   // Range upgrade rank (0-5)
+            var damage_rank = skill_upgrades[0][1];  // Damage upgrade rank (0-5)
+            var speed_rank = skill_upgrades[0][2];   // Speed upgrade rank (0-5)
+            
+            // Each rank adds 20% (1.2x per rank)
+            // Formula: base * (1 + 0.2 * rank)
+            projectile.maxRange *= (1 + 0.2 * range_rank);
+            projectile.damage *= (1 + 0.2 * damage_rank);
+            projectile.projectileSpeed *= (1 + 0.2 * speed_rank);
+            
+            show_debug_message("Projectile created with bonuses - Range: " + string(range_rank) + 
+                             ", Damage: " + string(damage_rank) + ", Speed: " + string(speed_rank));
+        }
+        
         // Projectile will automatically aim toward mouse/cursor in its Create event
         projectile.image_angle = projectile.direction;
     }

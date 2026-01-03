@@ -115,45 +115,31 @@ if (input_mode == "mouse" && cursor != noone) {
     var button2_x = menu_x + spacing + upgrade_button_width + spacing;
     var button3_x = menu_x + spacing + (upgrade_button_width + spacing) * 2;
     
-    show_debug_message("=== HOVER CHECK: cursor at " + string(cursor_gui_x) + ", " + string(cursor_gui_y));
-    
     // Check all visible upgrade buttons for hover
     for (var row = 0; row < total_rows; row++) {
         var current_row_y = upgrade_button_y + (row * (upgrade_button_height + row_spacing)) - scroll_offset;
         
-        show_debug_message("Hover Row " + string(row) + ": y=" + string(current_row_y) + " to " + string(current_row_y + upgrade_button_height) + " | content_y: " + string(content_y_start) + " to " + string(content_y_end));
-        
         // Skip if row is NOT AT ALL visible within content area
-        // A row is hoverable if ANY part of it overlaps with the content area
-        // Row overlaps if: row_bottom > content_start AND row_top < content_end
         var row_bottom = current_row_y + upgrade_button_height;
         if (row_bottom <= content_y_start || current_row_y >= content_y_end) {
-            show_debug_message("  SKIPPED (not visible)");
             continue;
         }
         
-        show_debug_message("  CHECKING hover for row " + string(row));
-        
         // Check which button is hovered
         if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button1_x, current_row_y, button1_x + upgrade_button_width, current_row_y + upgrade_button_height)) {
-            show_debug_message("  HOVER MATCH button 1!");
             hovered_row = row;
             hovered_col = 0;
             break;
         } else if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button2_x, current_row_y, button2_x + upgrade_button_width, current_row_y + upgrade_button_height)) {
-            show_debug_message("  HOVER MATCH button 2!");
             hovered_row = row;
             hovered_col = 1;
             break;
         } else if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button3_x, current_row_y, button3_x + upgrade_button_width, current_row_y + upgrade_button_height)) {
-            show_debug_message("  HOVER MATCH button 3!");
             hovered_row = row;
             hovered_col = 2;
             break;
         }
     }
-    
-    show_debug_message("Final hover state: row=" + string(hovered_row) + ", col=" + string(hovered_col));
     
     // Check if hovering confirm button
     if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button_x, button_y, button_x + button_width, button_y + button_height)) {
@@ -163,9 +149,6 @@ if (input_mode == "mouse" && cursor != noone) {
 
 // Handle mouse clicks
 if (clicked) {
-    show_debug_message("=== CLICK at GUI position: " + string(cursor_gui_x) + ", " + string(cursor_gui_y) + " ===");
-    show_debug_message("Current selected_upgrade BEFORE: " + string(selected_upgrade));
-    
     // Calculate upgrade button positions
     var total_button_width = upgrade_button_width * 3;
     var available_space = menu_width - total_button_width;
@@ -178,27 +161,15 @@ if (clicked) {
     for (var row = 0; row < total_rows; row++) {
         var current_row_y = upgrade_button_y + (row * (upgrade_button_height + row_spacing)) - scroll_offset;
         
-        show_debug_message("Click Row " + string(row) + ": y=" + string(current_row_y) + " to " + string(current_row_y + upgrade_button_height) + " | content_y: " + string(content_y_start) + " to " + string(content_y_end));
-        
         // Skip if row is NOT AT ALL visible within content area
-        // A row is clickable if ANY part of it overlaps with the content area
-        // Row overlaps if: row_bottom > content_start AND row_top < content_end
         var row_bottom = current_row_y + upgrade_button_height;
         if (row_bottom <= content_y_start || current_row_y >= content_y_end) {
-            show_debug_message("  SKIPPED (not visible)");
             continue;
         }
         
-        show_debug_message("  CHECKING buttons for row " + string(row));
-        show_debug_message("  Button 1: x=" + string(button1_x) + "-" + string(button1_x + upgrade_button_width) + " y=" + string(current_row_y) + "-" + string(current_row_y + upgrade_button_height));
-        show_debug_message("  Button 2: x=" + string(button2_x) + "-" + string(button2_x + upgrade_button_width) + " y=" + string(current_row_y) + "-" + string(current_row_y + upgrade_button_height));
-        show_debug_message("  Button 3: x=" + string(button3_x) + "-" + string(button3_x + upgrade_button_width) + " y=" + string(current_row_y) + "-" + string(current_row_y + upgrade_button_height));
-        
         // Check button 1
         if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button1_x, current_row_y, button1_x + upgrade_button_width, current_row_y + upgrade_button_height)) {
-            show_debug_message("  CLICK MATCH button 1!");
             if (row == 0) {
-                show_debug_message("Clicked upgrade button 1");
                 selected_upgrade = 1;
                 current_row = 0;
                 current_col = 0;
@@ -213,7 +184,6 @@ if (clicked) {
         // Check button 2
         else if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button2_x, current_row_y, button2_x + upgrade_button_width, current_row_y + upgrade_button_height)) {
             if (row == 0) {
-                show_debug_message("Clicked upgrade button 2");
                 selected_upgrade = 2;
                 current_row = 0;
                 current_col = 1;
@@ -228,7 +198,6 @@ if (clicked) {
         // Check button 3
         else if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button3_x, current_row_y, button3_x + upgrade_button_width, current_row_y + upgrade_button_height)) {
             if (row == 0) {
-                show_debug_message("Clicked upgrade button 3");
                 selected_upgrade = 3;
                 current_row = 0;
                 current_col = 2;
@@ -242,21 +211,31 @@ if (clicked) {
         }
     }
     
-    show_debug_message("=== Click loop finished. selected_upgrade = " + string(selected_upgrade));
-    
     // Check confirm button - must be hovering to click
     if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button_x, button_y, button_x + button_width, button_y + button_height)) {
-        show_debug_message("Clicked confirm button. selected_upgrade = " + string(selected_upgrade));
         if (selected_upgrade > 0) {
-            // Apply the selected upgrade
-            show_debug_message("Applied upgrade " + string(selected_upgrade));
+            // APPLY THE UPGRADE - Save to global.playerBuild
+            var player = instance_find(obj_player, 0);
+            if (player != noone) {
+                // Calculate row and column from selected_upgrade (1-3 maps to row 0, cols 0-2)
+                var upgrade_row = floor((selected_upgrade - 1) / 3);
+                var upgrade_col = (selected_upgrade - 1) % 3;
+                
+                // Increment the upgrade rank (max 5)
+                if (global.playerBuild.skill_upgrades[upgrade_row][upgrade_col] < 5) {
+                    global.playerBuild.skill_upgrades[upgrade_row][upgrade_col]++;
+                    show_debug_message("Upgraded [" + string(upgrade_row) + "," + string(upgrade_col) + "] to rank " + string(global.playerBuild.skill_upgrades[upgrade_row][upgrade_col]));
+                }
+                
+                // Update player's local reference
+                player.skill_upgrades = global.playerBuild.skill_upgrades;
+            }
             
             global.isPaused = false;
             global.canPause = true;
             instance_destroy();
         } else {
             // Show error popup - mouse click without selection
-            show_debug_message("Showing error popup - no upgrade selected");
             show_error_popup = true;
             error_message = "Please select an upgrade to continue";
         }
@@ -400,7 +379,6 @@ if (input_check_pressed("accept")) {
             current_location = "grid";
         } else {
             // Mouse clicked but not hovering over anything - ignore the accept
-            // This prevents clicking below visible area from selecting the default highlighted button
             should_process_accept = false;
         }
     }
@@ -417,19 +395,33 @@ if (input_check_pressed("accept")) {
                 error_message = "That upgrade has yet to be unlocked.";
             }
         } else if (current_location == "confirm") {
-        // Confirm button
-        if (selected_upgrade > 0) {
-            // Apply the selected upgrade
-            show_debug_message("Applied upgrade " + string(selected_upgrade));
-            
-            global.isPaused = false;
-            global.canPause = true;
-            instance_destroy();
-        } else {
-            // Show error popup
-            show_error_popup = true;
-            error_message = "Please select an upgrade to continue";
-        }
+            // Confirm button
+            if (selected_upgrade > 0) {
+                // APPLY THE UPGRADE - Save to global.playerBuild
+                var player = instance_find(obj_player, 0);
+                if (player != noone) {
+                    // Calculate row and column from selected_upgrade (1-3 maps to row 0, cols 0-2)
+                    var upgrade_row = floor((selected_upgrade - 1) / 3);
+                    var upgrade_col = (selected_upgrade - 1) % 3;
+                    
+                    // Increment the upgrade rank (max 5)
+                    if (global.playerBuild.skill_upgrades[upgrade_row][upgrade_col] < 5) {
+                        global.playerBuild.skill_upgrades[upgrade_row][upgrade_col]++;
+                        show_debug_message("Upgraded [" + string(upgrade_row) + "," + string(upgrade_col) + "] to rank " + string(global.playerBuild.skill_upgrades[upgrade_row][upgrade_col]));
+                    }
+                    
+                    // Update player's local reference
+                    player.skill_upgrades = global.playerBuild.skill_upgrades;
+                }
+                
+                global.isPaused = false;
+                global.canPause = true;
+                instance_destroy();
+            } else {
+                // Show error popup
+                show_error_popup = true;
+                error_message = "Please select an upgrade to continue";
+            }
         }
     }
 }

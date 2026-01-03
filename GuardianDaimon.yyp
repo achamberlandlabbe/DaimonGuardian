@@ -487,6 +487,7 @@
     {"id":{"name":"scr_calculateVehicleStats","path":"scripts/scr_calculateVehicleStats/scr_calculateVehicleStats.yy",},},
     {"id":{"name":"scr_customFunctions","path":"scripts/scr_customFunctions/scr_customFunctions.yy",},},
     {"id":{"name":"scr_globalsMacrosAndEnums","path":"scripts/scr_globalsMacrosAndEnums/scr_globalsMacrosAndEnums.yy",},},
+    {"id":{"name":"scr_init_skill_system","path":"scripts/scr_init_skill_system/scr_init_skill_system.yy",},},
     {"id":{"name":"scr_skillData","path":"scripts/scr_skillData/scr_skillData.yy",},},
     {"id":{"name":"scrConfig","path":"scripts/scrConfig/scrConfig.yy",},},
     {"id":{"name":"trophyGlobals","path":"scripts/trophyGlobals/trophyGlobals.yy",},},

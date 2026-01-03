@@ -26,6 +26,7 @@
     {"name":"obj_upgradeMenu","order":3,"path":"objects/obj_upgradeMenu/obj_upgradeMenu.yy",},
     {"name":"scr_calculateCurrentGear","order":2,"path":"scripts/scr_calculateCurrentGear/scr_calculateCurrentGear.yy",},
     {"name":"scr_calculateVehicleStats","order":1,"path":"scripts/scr_calculateVehicleStats/scr_calculateVehicleStats.yy",},
+    {"name":"scr_init_skill_system","order":4,"path":"scripts/scr_init_skill_system/scr_init_skill_system.yy",},
     {"name":"scr_skillData","order":3,"path":"scripts/scr_skillData/scr_skillData.yy",},
     {"name":"snd_arcaneBolt","order":10,"path":"sounds/snd_arcaneBolt/snd_arcaneBolt.yy",},
     {"name":"snd_critBuff","order":20,"path":"sounds/snd_critBuff/snd_critBuff.yy",},

@@ -18,6 +18,9 @@ if (!variable_global_exists("playerBuild")) {
     init_skill_system();
 }
 
+// Create a local reference to skill upgrades for easier access
+skill_upgrades = global.playerBuild.skill_upgrades;
+
 // Level anima system
 player_level = 1;
 player_anima = 0;  // Anima collected from kills (physical pickups)

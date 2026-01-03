@@ -120,7 +120,13 @@ for (var row = 0; row < total_rows; row++) {
         draw_set_color(c_white);
         draw_text(button1_x + upgrade_button_width / 2, text_y, "Base Attack");
         draw_text(button1_x + upgrade_button_width / 2, text_y + line_spacing, "+20% Range");
-        draw_text(button1_x + upgrade_button_width / 2, text_y + line_spacing * 2, string(upgrade1_rank) + "/5 > " + string(upgrade1_rank + 1) + "/5");
+        
+        // Display rank or (Max) if at 5/5
+        if (upgrade1_rank >= 5) {
+            draw_text(button1_x + upgrade_button_width / 2, text_y + line_spacing * 2, string(upgrade1_rank) + "/5 (Max)");
+        } else {
+            draw_text(button1_x + upgrade_button_width / 2, text_y + line_spacing * 2, string(upgrade1_rank) + "/5 > " + string(upgrade1_rank + 1) + "/5");
+        }
         
         // Button 2 - Damage
         var hover2 = false;
@@ -143,7 +149,13 @@ for (var row = 0; row < total_rows; row++) {
         draw_set_color(c_white);
         draw_text(button2_x + upgrade_button_width / 2, text_y, "Base Attack");
         draw_text(button2_x + upgrade_button_width / 2, text_y + line_spacing, "+20% Damage");
-        draw_text(button2_x + upgrade_button_width / 2, text_y + line_spacing * 2, string(upgrade2_rank) + "/5 > " + string(upgrade2_rank + 1) + "/5");
+        
+        // Display rank or (Max) if at 5/5
+        if (upgrade2_rank >= 5) {
+            draw_text(button2_x + upgrade_button_width / 2, text_y + line_spacing * 2, string(upgrade2_rank) + "/5 (Max)");
+        } else {
+            draw_text(button2_x + upgrade_button_width / 2, text_y + line_spacing * 2, string(upgrade2_rank) + "/5 > " + string(upgrade2_rank + 1) + "/5");
+        }
         
         // Button 3 - Speed
         var hover3 = false;
@@ -166,7 +178,13 @@ for (var row = 0; row < total_rows; row++) {
         draw_set_color(c_white);
         draw_text(button3_x + upgrade_button_width / 2, text_y, "Base Attack");
         draw_text(button3_x + upgrade_button_width / 2, text_y + line_spacing, "+20% Speed");
-        draw_text(button3_x + upgrade_button_width / 2, text_y + line_spacing * 2, string(upgrade3_rank) + "/5 > " + string(upgrade3_rank + 1) + "/5");
+        
+        // Display rank or (Max) if at 5/5
+        if (upgrade3_rank >= 5) {
+            draw_text(button3_x + upgrade_button_width / 2, text_y + line_spacing * 2, string(upgrade3_rank) + "/5 (Max)");
+        } else {
+            draw_text(button3_x + upgrade_button_width / 2, text_y + line_spacing * 2, string(upgrade3_rank) + "/5 > " + string(upgrade3_rank + 1) + "/5");
+        }
     } else {
         // Placeholder rows
         for (var col = 0; col < 3; col++) {
