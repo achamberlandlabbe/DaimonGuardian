@@ -105,6 +105,9 @@ if (room == roomTitleScreen) {
                 // Trigger save
                 global.doSave = true;
 
+                // Close confirmation dialog before changing rooms
+                showNewGameConfirmation = false;
+
                 // Start new game
                 room_goto(global.startingRoom);
             } else {
