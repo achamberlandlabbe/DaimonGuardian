@@ -1,7 +1,7 @@
 /// obj_player Create Event - Guardian Daimon
 // Daimon stats
-playerHP = 100;
-playerMaxHP = 100;
+playerHP = 150;
+playerMaxHP = 150;
 playerSpeed = 10;  // Base movement speed in pixels per frame
 
 // Movement

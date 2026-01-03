@@ -29,13 +29,7 @@ draw_set_color(c_white);
 var text_width = string_width("Level " + string(player_level));
 draw_text(xp_bar_x + (gui_w/2) - (text_width/2), xp_bar_y - 2, "Level " + string(player_level));
 
-// === CONTINUES (Top-right) ===
-var continues_x = gui_w - 120;
-var continues_y = 20;
-
-draw_set_halign(fa_right);
-draw_set_color(c_yellow);
-draw_text(continues_x, continues_y, "Continues: " + string(continues));
+// === CONTINUES DISPLAY REMOVED - Continue mechanic disabled ===
 
 // === COMBO COUNTER (if active) ===
 if (combo_count > 0) {
@@ -63,50 +57,8 @@ if (combo_count > 0) {
     draw_rectangle(timer_bar_x, timer_bar_y, timer_bar_x + (timer_bar_width * combo_timer_percent), timer_bar_y + timer_bar_height, false);
 }
 
-// === ABILITY COOLDOWNS (Bottom center) ===
-var ability_display_y = gui_h - 60;
-var ability_spacing = 60;
-var ability_start_x = (gui_w / 2) - ((array_length(abilities) * ability_spacing) / 2);
-
-for (var i = 0; i < array_length(abilities); i++) {
-    var ability_x = ability_start_x + (i * ability_spacing);
-    var ability_icon_size = 40;
-    
-    // Background
-    draw_set_color(c_black);
-    draw_set_alpha(0.7);
-    draw_rectangle(ability_x - ability_icon_size/2 - 2, ability_display_y - ability_icon_size/2 - 2, 
-                   ability_x + ability_icon_size/2 + 2, ability_display_y + ability_icon_size/2 + 2, false);
-    draw_set_alpha(1);
-    
-    // Icon placeholder (would be sprite in final version)
-    if (ability_cooldowns[i] > 0) {
-        // On cooldown - darker
-        draw_set_color(c_dkgray);
-    } else {
-        // Ready - bright
-        draw_set_color(c_white);
-    }
-    draw_rectangle(ability_x - ability_icon_size/2, ability_display_y - ability_icon_size/2,
-                   ability_x + ability_icon_size/2, ability_display_y + ability_icon_size/2, false);
-    
-    // Cooldown overlay
-    if (ability_cooldowns[i] > 0) {
-        var cooldown_percent = ability_cooldowns[i] / abilities[i].cooldown_max;
-        draw_set_color(c_black);
-        draw_set_alpha(0.6);
-        var cooldown_height = ability_icon_size * cooldown_percent;
-        draw_rectangle(ability_x - ability_icon_size/2, ability_display_y - ability_icon_size/2,
-                       ability_x + ability_icon_size/2, ability_display_y - ability_icon_size/2 + cooldown_height, false);
-        draw_set_alpha(1);
-    }
-    
-    // Ability number
-    draw_set_color(c_white);
-    draw_set_halign(fa_center);
-    draw_set_valign(fa_middle);
-    draw_text(ability_x, ability_display_y, string(i + 1));
-}
+// === ABILITY COOLDOWNS DISPLAY REMOVED ===
+// (Will be re-implemented when multiple abilities are added)
 
 // Reset draw settings
 draw_set_halign(fa_left);

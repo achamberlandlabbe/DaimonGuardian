@@ -3,13 +3,9 @@
 
 
 -----------------------------------------------bugs--------------------------------------------------
-press to continue is off center
+
 cursor can't go right on title screen
-game crashes if we try to load
-no dark screen during tutorial
-no tutorial text visible
-new game confirmation pupup visible once game starts
-2 dark overlays when game starts
+
 
 -------------------------------------------fixes to test--------------------------------------------------
 
@@ -21,8 +17,10 @@ new game confirmation pupup visible once game starts
 
 -----------------------------------------------to do-----------------------------------------------
 
--level up mechanics
+-skills
 -obj_protect visuals
+-add page number in story and tutorial
+-artwork for story
 
 
 -game release posts
