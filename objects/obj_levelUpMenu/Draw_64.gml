@@ -268,7 +268,7 @@ if (show_error_popup) {
     draw_rectangle(0, 0, gui_w, gui_h, false);
     draw_set_alpha(1);
     
-    var popup_width = 500;
+    var popup_width = 600;  // Increased from 500 to fit longer text
     var popup_height = 200;
     var popup_x = (gui_w / 2) - (popup_width / 2);
     var popup_y = (gui_h / 2) - (popup_height / 2);

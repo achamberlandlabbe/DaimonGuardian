@@ -104,6 +104,26 @@ if (show_main_menu_confirmation) {
 #region Cursor-Based Menu Selection
 var cursor = instance_find(obj_cursor, 0);
 if (cursor != noone) {
+    // Convert cursor room position to GUI position
+    var cam = view_camera[0];
+    var cam_x = camera_get_view_x(cam);
+    var cam_y = camera_get_view_y(cam);
+    var cam_w = camera_get_view_width(cam);
+    var cam_h = camera_get_view_height(cam);
+    
+    var gui_w = display_get_gui_width();
+    var gui_h = display_get_gui_height();
+    
+    var cursor_gui_x = cursor.x;
+    var cursor_gui_y = cursor.y;
+    
+    // Only convert coordinates if camera dimensions are valid (during gameplay)
+    // On title screen, room coordinates = GUI coordinates, so no conversion needed
+    if (cam_w > 0 && cam_h > 0) {
+        cursor_gui_x = ((cursor.x - cam_x) / cam_w) * gui_w;
+        cursor_gui_y = ((cursor.y - cam_y) / cam_h) * gui_h;
+    }
+    
     // Menu positioning (matching Draw GUI Event calculations)
     draw_set_font(Font1);
 
@@ -116,6 +136,9 @@ if (cursor != noone) {
     var equal_spacing = available_height / total_gaps;
 
     var roomName = room_get_name(room);
+    
+    // Track previous selection to detect changes
+    var prev_selection = optionsMenuSelection;
 
     // Check each option's bounding box
     for (var i = 0; i < array_length(optionsList); i++) {
@@ -133,11 +156,17 @@ if (cursor != noone) {
         var option_height = string_height(optionsList[i]);
 
         // Check if cursor is inside this option's rectangle (centered text)
-        if (cursor.x >= option_x - option_width/2 && cursor.x <= option_x + option_width/2 &&
-            cursor.y >= option_y && cursor.y <= option_y + option_height) {
+        // FIXED: Use GUI coordinates instead of room coordinates
+        if (cursor_gui_x >= option_x - option_width/2 && cursor_gui_x <= option_x + option_width/2 &&
+            cursor_gui_y >= option_y && cursor_gui_y <= option_y + option_height) {
             optionsMenuSelection = i;
             break;
         }
+    }
+    
+    // Play sound if selection changed via mouse hover
+    if (optionsMenuSelection != prev_selection) {
+        playSFX(snd_switch, 1, 1, 1);
     }
 
     // Cursor clicking on slider bars for volume and sensitivity options (first 4 options)
@@ -155,12 +184,14 @@ if (cursor != noone) {
         var slider_height = 30;
 
         // Check if cursor is over slider area and mouse button held
-        if (cursor.x >= slider_x && cursor.x <= slider_x + slider_width &&
-            cursor.y >= value_y - slider_height/2 && cursor.y <= value_y + slider_height/2) {
+        // FIXED: Use GUI coordinates instead of room coordinates
+        if (cursor_gui_x >= slider_x && cursor_gui_x <= slider_x + slider_width &&
+            cursor_gui_y >= value_y - slider_height/2 && cursor_gui_y <= value_y + slider_height/2) {
 
             if (mouse_check_button(mb_left)) {
                 // Calculate value based on cursor position on slider
-                var slider_percent = clamp((cursor.x - slider_x) / slider_width, 0, 1);
+                // FIXED: Use GUI coordinates instead of room coordinates
+                var slider_percent = clamp((cursor_gui_x - slider_x) / slider_width, 0, 1);
 
                 switch(optionsMenuSelection) {
                     case 0: // Master volume

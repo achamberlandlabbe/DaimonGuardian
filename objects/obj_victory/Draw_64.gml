@@ -1,137 +1,63 @@
-/// obj_player Step Event - Guardian Daimon
-// Exit early if game is paused
-if (global.isPaused) {
+/// obj_victory Draw GUI Event - Guardian Daimon
+// Game Over / Victory Screen
+// This draws on the GUI layer (always visible on screen)
+
+// Semi-transparent black overlay
+draw_set_alpha(0.7);
+draw_set_color(c_black);
+draw_rectangle(0, 0, display_get_gui_width(), display_get_gui_height(), false);
+draw_set_alpha(1);
+
+// Determine if victory or defeat
+var is_victory = false; // You can set this based on a victory condition
+var title_text = is_victory ? "VICTORY!" : "GAME OVER";
+var title_color = is_victory ? c_lime : c_red;
+
+// Draw title
+draw_set_halign(fa_center);
+draw_set_valign(fa_middle);
+draw_set_font(Title); // Make sure you have this font, or use -1 for default
+
+// Title shadow
+draw_set_color(c_black);
+draw_text(display_get_gui_width()/2 + 4, display_get_gui_height()/2 - 100 + 4, title_text);
+
+// Title
+draw_set_color(title_color);
+draw_text(display_get_gui_width()/2, display_get_gui_height()/2 - 100, title_text);
+
+// Menu options
+draw_set_font(Font1);
+var menu_y = display_get_gui_height()/2 + 50; // Move down from title
+var spacing = 60; // Increase spacing for better visibility
+
+// Safety check - ensure menu_options exists (Create event may not have run yet)
+if (!variable_instance_exists(id, "menu_options")) {
+    draw_set_color(c_red);
+    draw_text(100, 100, "ERROR: menu_options not initialized!");
     exit;
 }
 
-// === MOVEMENT INPUT (WASD or Left Stick) ===
-var move_x = input_check("right") - input_check("left");
-var move_y = input_check("down") - input_check("up");
-
-// Normalize diagonal movement
-if (move_x != 0 && move_y != 0) {
-    move_x *= 0.707;  // 1/sqrt(2)
-    move_y *= 0.707;
-}
-
-// Apply acceleration or friction
-if (move_x != 0 || move_y != 0) {
-    // Accelerate toward target velocity
-    var target_hspeed = move_x * playerSpeed;
-    var target_vspeed = move_y * playerSpeed;
+// Draw menu options
+show_debug_message("Drawing " + string(array_length(menu_options)) + " menu options");
+for (var i = 0; i < array_length(menu_options); i++) {
+    var y_pos = menu_y + (i * spacing);
     
-    hspeed_current = lerp(hspeed_current, target_hspeed, move_acceleration);
-    vspeed_current = lerp(vspeed_current, target_vspeed, move_acceleration);
-} else {
-    // Apply friction when no input
-    hspeed_current *= move_friction;
-    vspeed_current *= move_friction;
-    
-    // Stop completely when very slow
-    if (abs(hspeed_current) < 0.1) hspeed_current = 0;
-    if (abs(vspeed_current) < 0.1) vspeed_current = 0;
-}
-
-// Move player
-x += hspeed_current;
-y += vspeed_current;
-
-// Keep player in room bounds (with margin)
-var margin = 32;
-x = clamp(x, margin, room_width - margin);
-y = clamp(y, margin, room_height - margin);
-
-// === AIM DIRECTION (Mouse or Right Stick) ===
-// Try gamepad right stick first
-var aim_x = input_value("aim_right") - input_value("aim_left");
-var aim_y = input_value("aim_down") - input_value("aim_up");
-
-if (aim_x != 0 || aim_y != 0) {
-    // Gamepad right stick is being used
-    aim_direction = point_direction(0, 0, aim_x, aim_y);
-} else {
-    // No gamepad input - use mouse position
-    aim_direction = point_direction(x, y, mouse_x, mouse_y);
-}
-
-// Update sprite direction based on aim
-image_angle = aim_direction - 90;
-
-// === ABILITY USAGE ===
-// Update cooldowns
-for (var i = 0; i < array_length(abilities); i++) {
-    if (ability_cooldowns[i] > 0) {
-        ability_cooldowns[i]--;
-    }
-}
-
-// Use basic attack (ability 0) with mouse button held or attack button held
-if (array_length(abilities) > 0) {
-    if ((mouse_check_button(mb_left) || input_check("attack")) 
-        && ability_cooldowns[0] <= 0) {
-        
-        // Use the ability
-        var ability = abilities[0];
-        ability_cooldowns[0] = ability.cooldown_max;
-        
-        // Spawn projectile at player position
-        var projectile = instance_create_depth(x, y, depth - 1, obj_PCautoAttack);
-        
-        // Projectile will automatically aim toward mouse/cursor in its Create event
-        projectile.image_angle = projectile.direction;
-    }
-}
-
-// === COMBO SYSTEM ===
-if (combo_count > 0) {
-    combo_timer--;
-    if (combo_timer <= 0) {
-        // Combo expired
-        combo_count = 0;
-    }
-}
-
-// === XP AND LEVELING ===
-// Check if we've earned enough anima to level up
-if (player_anima >= anima_to_next_level) {
-    player_anima -= anima_to_next_level;
-    player_level++;
-    
-    // Scale XP requirement
-    anima_to_next_level = floor(anima_to_next_level * 1.2);
-    
-    // Heal to full on level up
-    playerHP = playerMaxHP;
-    
-    // Show level up menu
-    instance_create_depth(x, y, -9999, obj_levelUpMenu);
-    show_debug_message("LEVEL UP! Now level " + string(player_level));
-}
-
-// Update depth for proper layering
-depth = -y;
-
-// Check for death
-if (playerHP <= 0) {
-    // CONTINUE MECHANIC DISABLED FOR NOW
-    /*
-    if (continues > 0) {
-        continues--;
-        playerHP = playerMaxHP;
-        show_debug_message("Continue used! " + string(continues) + " remaining");
+    // Highlight selected option
+    if (i == selected_option) {
+        draw_set_color(c_yellow);
     } else {
-    */
-        // Game over - spawn game over screen
-        if (!instance_exists(obj_victory)) {
-            instance_create_depth(0, 0, -10004, obj_victory);
-        }
-        global.gameOver = true;
-        global.isPaused = true;
-    //}
+        draw_set_color(c_white);
+    }
+    
+    draw_text(display_get_gui_width()/2, y_pos, menu_options[i]);
 }
 
-// Camera follows player
-var cam = view_camera[0];
-var cam_w = camera_get_view_width(cam);
-var cam_h = camera_get_view_height(cam);
-camera_set_view_pos(cam, x - cam_w/2, y - cam_h/2);
+// Draw action prompt at bottom
+draw_set_color(c_gray);
+var action_button = input_binding_get_name("accept");
+draw_text(display_get_gui_width()/2, display_get_gui_height() - 50, "Press " + action_button + " to confirm");
+
+// Reset alignment
+draw_set_halign(fa_left);
+draw_set_valign(fa_top);

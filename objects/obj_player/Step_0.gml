@@ -1,4 +1,33 @@
 /// obj_player Step Event - Guardian Daimon
+
+// === CHECK FOR DEATH FIRST (before pause check) ===
+// This ensures game over screen appears even if player dies while paused
+if (playerHP <= 0) {
+    show_debug_message("Player died! HP: " + string(playerHP));
+    
+    // Destroy any open menus first
+    if (instance_exists(obj_levelUpMenu)) {
+        instance_destroy(obj_levelUpMenu);
+        show_debug_message("Destroyed level up menu");
+    }
+    if (instance_exists(obj_skillSelectionMenu)) {
+        instance_destroy(obj_skillSelectionMenu);
+        show_debug_message("Destroyed skill selection menu");
+    }
+    
+    // Game over - spawn game over screen
+    if (!instance_exists(obj_victory)) {
+        var victory_obj = instance_create_depth(0, 0, -10004, obj_victory);
+        show_debug_message("Created obj_victory at depth -10004, instance ID: " + string(victory_obj));
+    } else {
+        show_debug_message("obj_victory already exists!");
+    }
+    global.gameOver = true;
+    global.isPaused = true;
+    show_debug_message("Set global.gameOver = true, global.isPaused = true");
+    exit; // Exit after setting up game over
+}
+
 // Exit early if game is paused
 if (global.isPaused) {
     exit;
@@ -120,32 +149,20 @@ if (player_anima >= anima_to_next_level) {
     // Heal to full on level up
     playerHP = playerMaxHP;
     
-    // Show level up menu
-    instance_create_depth(x, y, -9999, obj_levelUpMenu);
-    show_debug_message("LEVEL UP! Now level " + string(player_level));
+    // Check if this is a skill unlock level (every 5 levels)
+    if (player_level % 5 == 0) {
+        // Show skill selection menu at levels 5, 10, 15, 20, 25, 30
+        instance_create_depth(x, y, -9999, obj_skillSelectionMenu);
+        show_debug_message("SKILL UNLOCK! Level " + string(player_level));
+    } else {
+        // Show normal level up menu for upgrades
+        instance_create_depth(x, y, -9999, obj_levelUpMenu);
+        show_debug_message("LEVEL UP! Now level " + string(player_level));
+    }
 }
 
 // Update depth for proper layering
 depth = -y;
-
-// Check for death
-if (playerHP <= 0) {
-    // CONTINUE MECHANIC DISABLED FOR NOW
-    /*
-    if (continues > 0) {
-        continues--;
-        playerHP = playerMaxHP;
-        show_debug_message("Continue used! " + string(continues) + " remaining");
-    } else {
-    */
-        // Game over - spawn game over screen
-        if (!instance_exists(obj_victory)) {
-            instance_create_depth(0, 0, -10004, obj_victory);
-        }
-        global.gameOver = true;
-        global.isPaused = true;
-    //}
-}
 
 // Camera follows player
 var cam = view_camera[0];

@@ -21,6 +21,7 @@
     {"name":"obj_parentProjectile","order":1,"path":"objects/obj_parentProjectile/obj_parentProjectile.yy",},
     {"name":"obj_protect","order":6,"path":"objects/obj_protect/obj_protect.yy",},
     {"name":"obj_rock","order":1,"path":"objects/obj_rock/obj_rock.yy",},
+    {"name":"obj_skillSelectionMenu","order":11,"path":"objects/obj_skillSelectionMenu/obj_skillSelectionMenu.yy",},
     {"name":"obj_story","order":9,"path":"objects/obj_story/obj_story.yy",},
     {"name":"obj_tutorial","order":4,"path":"objects/obj_tutorial/obj_tutorial.yy",},
     {"name":"obj_upgradeMenu","order":3,"path":"objects/obj_upgradeMenu/obj_upgradeMenu.yy",},

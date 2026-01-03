@@ -214,8 +214,21 @@ if (clicked) {
     // Check confirm button - must be hovering to click
     if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button_x, button_y, button_x + button_width, button_y + button_height)) {
         if (selected_upgrade > 0) {
-            // APPLY THE UPGRADE - Save to global.playerBuild
+            // Check if the selected upgrade is already maxed out
             var player = instance_find(obj_player, 0);
+            if (player != noone && variable_instance_exists(player, "skill_upgrades")) {
+                var upgrade_row = floor((selected_upgrade - 1) / 3);
+                var upgrade_col = (selected_upgrade - 1) % 3;
+                
+                // Check if already at max rank (5)
+                if (player.skill_upgrades[upgrade_row][upgrade_col] >= 5) {
+                    show_error_popup = true;
+                    error_message = "This skill cannot be upgraded any further.";
+                    exit;
+                }
+            }
+            
+            // APPLY THE UPGRADE - Save to global.playerBuild
             if (player != noone) {
                 // Calculate row and column from selected_upgrade (1-3 maps to row 0, cols 0-2)
                 var upgrade_row = floor((selected_upgrade - 1) / 3);
@@ -397,8 +410,21 @@ if (input_check_pressed("accept")) {
         } else if (current_location == "confirm") {
             // Confirm button
             if (selected_upgrade > 0) {
-                // APPLY THE UPGRADE - Save to global.playerBuild
+                // Check if the selected upgrade is already maxed out
                 var player = instance_find(obj_player, 0);
+                if (player != noone && variable_instance_exists(player, "skill_upgrades")) {
+                    var upgrade_row = floor((selected_upgrade - 1) / 3);
+                    var upgrade_col = (selected_upgrade - 1) % 3;
+                    
+                    // Check if already at max rank (5)
+                    if (player.skill_upgrades[upgrade_row][upgrade_col] >= 5) {
+                        show_error_popup = true;
+                        error_message = "This skill cannot be upgraded any further.";
+                        exit;
+                    }
+                }
+                
+                // APPLY THE UPGRADE - Save to global.playerBuild
                 if (player != noone) {
                     // Calculate row and column from selected_upgrade (1-3 maps to row 0, cols 0-2)
                     var upgrade_row = floor((selected_upgrade - 1) / 3);

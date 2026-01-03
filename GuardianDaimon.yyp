@@ -131,6 +131,7 @@
     {"id":{"name":"obj_roomTransition","path":"objects/obj_roomTransition/obj_roomTransition.yy",},},
     {"id":{"name":"obj_score","path":"objects/obj_score/obj_score.yy",},},
     {"id":{"name":"obj_sharedSystems","path":"objects/obj_sharedSystems/obj_sharedSystems.yy",},},
+    {"id":{"name":"obj_skillSelectionMenu","path":"objects/obj_skillSelectionMenu/obj_skillSelectionMenu.yy",},},
     {"id":{"name":"obj_sound","path":"objects/obj_sound/obj_sound.yy",},},
     {"id":{"name":"obj_spawner","path":"objects/obj_spawner/obj_spawner.yy",},},
     {"id":{"name":"obj_story","path":"objects/obj_story/obj_story.yy",},},
