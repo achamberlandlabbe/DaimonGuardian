@@ -85,6 +85,7 @@ if (show_error_popup) {
         if (cursor != noone && point_in_rectangle(cursor_gui_x, cursor_gui_y, ok_button_x, ok_button_y, ok_button_x + ok_button_width, ok_button_y + ok_button_height)) {
             show_error_popup = false;
             error_message = "";
+            playSFX(snd_select, 1, 1, 1);
         }
         // Consume the click regardless - don't process menu
         exit;
@@ -94,6 +95,7 @@ if (show_error_popup) {
     if (keyboard_check_pressed(vk_enter) || keyboard_check_pressed(vk_space) || gamepad_button_check_pressed(0, gp_face1)) {
         show_error_popup = false;
         error_message = "";
+        playSFX(snd_select, 1, 1, 1);
         exit;
     }
     
@@ -105,6 +107,13 @@ if (show_error_popup) {
 var hovered_row = -1;
 var hovered_col = -1;
 var hovered_confirm = false;
+
+// Track previous hover state for sound effects
+if (!variable_instance_exists(id, "prev_hovered_row")) {
+    prev_hovered_row = -1;
+    prev_hovered_col = -1;
+    prev_hovered_confirm = false;
+}
 
 if (input_mode == "mouse" && cursor != noone) {
     // Calculate upgrade button positions
@@ -145,6 +154,35 @@ if (input_mode == "mouse" && cursor != noone) {
     if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button_x, button_y, button_x + button_width, button_y + button_height)) {
         hovered_confirm = true;
     }
+    
+    // Play sound ONLY if hover changed to a different item
+    var hover_changed = false;
+    if (hovered_confirm && !prev_hovered_confirm) {
+        // Just started hovering confirm button
+        hover_changed = true;
+    } else if (!hovered_confirm && prev_hovered_confirm) {
+        // Stopped hovering confirm button (but might be hovering grid item)
+        if (hovered_row >= 0) {
+            hover_changed = true;
+        }
+    } else if (hovered_row >= 0 && (hovered_row != prev_hovered_row || hovered_col != prev_hovered_col)) {
+        // Hovering a different grid item
+        hover_changed = true;
+    } else if (hovered_row < 0 && prev_hovered_row >= 0) {
+        // Stopped hovering grid items (but might be on confirm)
+        if (hovered_confirm) {
+            hover_changed = true;
+        }
+    }
+    
+    if (hover_changed) {
+        playSFX(snd_switch, 1, 1, 1);
+    }
+    
+    // Update previous hover state
+    prev_hovered_row = hovered_row;
+    prev_hovered_col = hovered_col;
+    prev_hovered_confirm = hovered_confirm;
 }
 
 // Handle mouse clicks
@@ -174,10 +212,12 @@ if (clicked) {
                 current_row = 0;
                 current_col = 0;
                 current_location = "grid";
+                playSFX(snd_select, 1, 1, 1);
             } else {
                 // Locked upgrade
                 show_error_popup = true;
                 error_message = "That upgrade has yet to be unlocked.";
+                playSFX(snd_select, 1, 1, 1);
             }
             exit;
         }
@@ -188,10 +228,12 @@ if (clicked) {
                 current_row = 0;
                 current_col = 1;
                 current_location = "grid";
+                playSFX(snd_select, 1, 1, 1);
             } else {
                 // Locked upgrade
                 show_error_popup = true;
                 error_message = "That upgrade has yet to be unlocked.";
+                playSFX(snd_select, 1, 1, 1);
             }
             exit;
         }
@@ -202,10 +244,12 @@ if (clicked) {
                 current_row = 0;
                 current_col = 2;
                 current_location = "grid";
+                playSFX(snd_select, 1, 1, 1);
             } else {
                 // Locked upgrade
                 show_error_popup = true;
                 error_message = "That upgrade has yet to be unlocked.";
+                playSFX(snd_select, 1, 1, 1);
             }
             exit;
         }
@@ -224,6 +268,7 @@ if (clicked) {
                 if (player.skill_upgrades[upgrade_row][upgrade_col] >= 5) {
                     show_error_popup = true;
                     error_message = "This skill cannot be upgraded any further.";
+                    playSFX(snd_select, 1, 1, 1);
                     exit;
                 }
             }
@@ -244,6 +289,7 @@ if (clicked) {
                 player.skill_upgrades = global.playerBuild.skill_upgrades;
             }
             
+            playSFX(snd_select, 1, 1, 1);
             global.isPaused = false;
             global.canPause = true;
             instance_destroy();
@@ -251,6 +297,7 @@ if (clicked) {
             // Show error popup - mouse click without selection
             show_error_popup = true;
             error_message = "Please select an upgrade to continue";
+            playSFX(snd_select, 1, 1, 1);
         }
         exit;
     }
@@ -284,6 +331,7 @@ if (input_check_pressed("left")) {
     if (current_location == "grid") {
         current_col--;
         if (current_col < 0) current_col = 2; // Wrap to rightmost column
+        playSFX(snd_switch, 1, 1, 1);
     }
 }
 
@@ -304,6 +352,7 @@ if (input_check_pressed("right")) {
     if (current_location == "grid") {
         current_col++;
         if (current_col > 2) current_col = 0; // Wrap to leftmost column
+        playSFX(snd_switch, 1, 1, 1);
     }
 }
 
@@ -326,6 +375,7 @@ if (input_check_pressed("down")) {
         if (current_row >= total_rows) {
             // Move to confirm button
             current_location = "confirm";
+            playSFX(snd_switch, 1, 1, 1);
         } else {
             // Check if the new row would be visible
             var new_row_y = upgrade_button_y + (current_row * (upgrade_button_height + row_spacing)) - scroll_offset;
@@ -336,6 +386,7 @@ if (input_check_pressed("down")) {
                 scroll_offset += scroll_speed;
                 scroll_offset = min(scroll_max, scroll_offset);
             }
+            playSFX(snd_switch, 1, 1, 1);
         }
     }
 }
@@ -358,6 +409,7 @@ if (input_check_pressed("up")) {
         // Move back to grid at bottom row
         current_location = "grid";
         current_row = total_rows - 1;
+        playSFX(snd_switch, 1, 1, 1);
     } else if (current_location == "grid") {
         if (current_row > 0) {
             current_row--;
@@ -370,6 +422,7 @@ if (input_check_pressed("up")) {
                 scroll_offset -= scroll_speed;
                 scroll_offset = max(0, scroll_offset);
             }
+            playSFX(snd_switch, 1, 1, 1);
         }
         // If current_row is 0, stay at row 0 (don't move or scroll)
     }
@@ -402,10 +455,12 @@ if (input_check_pressed("accept")) {
             if (current_row == 0) {
                 // Only row 0 has actual upgrades
                 selected_upgrade = (current_row * 3) + current_col + 1; // 1, 2, or 3
+                playSFX(snd_select, 1, 1, 1);
             } else {
                 // Locked upgrade
                 show_error_popup = true;
                 error_message = "That upgrade has yet to be unlocked.";
+                playSFX(snd_select, 1, 1, 1);
             }
         } else if (current_location == "confirm") {
             // Confirm button
@@ -420,6 +475,7 @@ if (input_check_pressed("accept")) {
                     if (player.skill_upgrades[upgrade_row][upgrade_col] >= 5) {
                         show_error_popup = true;
                         error_message = "This skill cannot be upgraded any further.";
+                        playSFX(snd_select, 1, 1, 1);
                         exit;
                     }
                 }
@@ -440,6 +496,7 @@ if (input_check_pressed("accept")) {
                     player.skill_upgrades = global.playerBuild.skill_upgrades;
                 }
                 
+                playSFX(snd_select, 1, 1, 1);
                 global.isPaused = false;
                 global.canPause = true;
                 instance_destroy();
@@ -447,6 +504,7 @@ if (input_check_pressed("accept")) {
                 // Show error popup
                 show_error_popup = true;
                 error_message = "Please select an upgrade to continue";
+                playSFX(snd_select, 1, 1, 1);
             }
         }
     }

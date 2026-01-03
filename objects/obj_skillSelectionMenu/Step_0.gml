@@ -73,6 +73,7 @@ if (show_error_popup) {
         if (cursor != noone && point_in_rectangle(cursor_gui_x, cursor_gui_y, ok_button_x, ok_button_y, ok_button_x + ok_button_width, ok_button_y + ok_button_height)) {
             show_error_popup = false;
             error_message = "";
+            playSFX(snd_select, 1, 1, 1);
         }
         // Consume the click regardless - don't process menu
         exit;
@@ -82,6 +83,7 @@ if (show_error_popup) {
     if (keyboard_check_pressed(vk_enter) || keyboard_check_pressed(vk_space) || gamepad_button_check_pressed(0, gp_face1)) {
         show_error_popup = false;
         error_message = "";
+        playSFX(snd_select, 1, 1, 1);
         exit;
     }
     
@@ -92,6 +94,12 @@ if (show_error_popup) {
 // Track which button is currently hovered in mouse mode
 var hovered_col = -1;
 var hovered_confirm = false;
+
+// Track previous hover state for sound effects
+if (!variable_instance_exists(id, "prev_hovered_col")) {
+    prev_hovered_col = -1;
+    prev_hovered_confirm = false;
+}
 
 // Calculate skill button positions (3 buttons in 1 row)
 var total_button_width = skill_button_width * 3;
@@ -116,6 +124,34 @@ if (input_mode == "mouse" && cursor != noone) {
     if (point_in_rectangle(cursor_gui_x, cursor_gui_y, button_x, button_y + skill_button_height + 40, button_x + button_width, button_y + skill_button_height + 40 + button_height)) {
         hovered_confirm = true;
     }
+    
+    // Play sound ONLY if hover changed to a different item
+    var hover_changed = false;
+    if (hovered_confirm && !prev_hovered_confirm) {
+        // Just started hovering confirm button
+        hover_changed = true;
+    } else if (!hovered_confirm && prev_hovered_confirm) {
+        // Stopped hovering confirm button (but might be hovering skill)
+        if (hovered_col >= 0) {
+            hover_changed = true;
+        }
+    } else if (hovered_col >= 0 && hovered_col != prev_hovered_col) {
+        // Hovering a different skill
+        hover_changed = true;
+    } else if (hovered_col < 0 && prev_hovered_col >= 0) {
+        // Stopped hovering skills (but might be on confirm)
+        if (hovered_confirm) {
+            hover_changed = true;
+        }
+    }
+    
+    if (hover_changed) {
+        playSFX(snd_switch, 1, 1, 1);
+    }
+    
+    // Update previous hover state
+    prev_hovered_col = hovered_col;
+    prev_hovered_confirm = hovered_confirm;
 }
 
 // Handle mouse clicks
@@ -125,6 +161,7 @@ if (clicked) {
         selected_skill = 1;
         current_col = 0;
         current_location = "grid";
+        playSFX(snd_select, 1, 1, 1);
         exit;
     }
     // Check button 2
@@ -132,6 +169,7 @@ if (clicked) {
         selected_skill = 2;
         current_col = 1;
         current_location = "grid";
+        playSFX(snd_select, 1, 1, 1);
         exit;
     }
     // Check button 3
@@ -139,6 +177,7 @@ if (clicked) {
         selected_skill = 3;
         current_col = 2;
         current_location = "grid";
+        playSFX(snd_select, 1, 1, 1);
         exit;
     }
     
@@ -151,6 +190,7 @@ if (clicked) {
             // For now, just close the menu
             show_debug_message("Selected skill " + string(selected_skill) + " for tier " + string(skill_tier));
             
+            playSFX(snd_select, 1, 1, 1);
             global.isPaused = false;
             global.canPause = true;
             instance_destroy();
@@ -158,6 +198,7 @@ if (clicked) {
             // Show error popup
             show_error_popup = true;
             error_message = "Please select a skill to continue";
+            playSFX(snd_select, 1, 1, 1);
         }
         exit;
     }
@@ -179,6 +220,7 @@ if (input_check_pressed("left")) {
     if (current_location == "grid") {
         current_col--;
         if (current_col < 0) current_col = 2; // Wrap to rightmost
+        playSFX(snd_switch, 1, 1, 1);
     }
 }
 
@@ -197,6 +239,7 @@ if (input_check_pressed("right")) {
     if (current_location == "grid") {
         current_col++;
         if (current_col > 2) current_col = 0; // Wrap to leftmost
+        playSFX(snd_switch, 1, 1, 1);
     }
 }
 
@@ -215,6 +258,7 @@ if (input_check_pressed("down")) {
     if (current_location == "grid") {
         // Move to confirm button
         current_location = "confirm";
+        playSFX(snd_switch, 1, 1, 1);
     }
 }
 
@@ -233,6 +277,7 @@ if (input_check_pressed("up")) {
     if (current_location == "confirm") {
         // Move back to grid
         current_location = "grid";
+        playSFX(snd_switch, 1, 1, 1);
     }
 }
 
@@ -258,6 +303,7 @@ if (input_check_pressed("accept")) {
         if (current_location == "grid") {
             // Select the current skill
             selected_skill = current_col + 1; // 1, 2, or 3
+            playSFX(snd_select, 1, 1, 1);
         } else if (current_location == "confirm") {
             // Confirm button
             if (selected_skill > 0) {
@@ -265,6 +311,7 @@ if (input_check_pressed("accept")) {
                 // TODO: Add the selected skill to global.playerBuild.ownedSkills
                 show_debug_message("Selected skill " + string(selected_skill) + " for tier " + string(skill_tier));
                 
+                playSFX(snd_select, 1, 1, 1);
                 global.isPaused = false;
                 global.canPause = true;
                 instance_destroy();
@@ -272,6 +319,7 @@ if (input_check_pressed("accept")) {
                 // Show error popup
                 show_error_popup = true;
                 error_message = "Please select a skill to continue";
+                playSFX(snd_select, 1, 1, 1);
             }
         }
     }

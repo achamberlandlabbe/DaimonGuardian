@@ -22,6 +22,7 @@ selecting an upgrade already at 5/5
 -add page number in story and tutorial
 -artwork for story
 -new skill menu
+-sfx in new skill menu and in upgrade menu
 
 
 -game release posts
